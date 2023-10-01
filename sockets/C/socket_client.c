@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
   struct sockaddr_in channel; /* holds IP address */
 
   if (argc < 2)
-    fatal("Usage: %s <server-name> <message>\n", argv[0]);
+    fatal("Usage: %s <message>\n", argv[0]);
 
   host = gethostbyname("127.0.0.1"); /* get server's IP address */
   if (!host)

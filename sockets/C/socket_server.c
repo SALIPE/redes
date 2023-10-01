@@ -24,21 +24,18 @@ int fatal(char *str1, char *str2)
   exit(-1);
 }
 
-// Aluno 1: Felipe Bueno = 2letra = 69
-// Aluno 2: Messias Magalhães = 77
-
 int main(int argc, char *argv[])
 {
   int server_socket,
       var_return,
       on,
-      flag,
-      received_number;
+      flag;
 
   char buf[BUF_SIZE];         /* buffer for incoming line */
   struct sockaddr_in channel; /* holds IP address */
   struct sockaddr_in channel_client;
   int addlen = sizeof(channel_client);
+  int received_number;
   float result;
 
   memset(&channel, 0, sizeof(channel)); /* make all-zeros */
@@ -59,13 +56,15 @@ int main(int argc, char *argv[])
   flag = 1;
   while (flag)
   {
-    // printf("%s\n", SERVER_MSG);
+    printf("%s\n", SERVER_MSG);
     recvfrom(server_socket, buf, BUF_SIZE, 0, (struct sockaddr *)&channel_client, &addlen);
 
     printf("%s received from %s:%d\n%s\n", argv[0], inet_ntoa(channel_client.sin_addr), ntohs(channel_client.sin_port), buf);
-
+    // Aluno 1: Felipe Bueno = 2letra = 69
+    // Aluno 2: Messias Magalhães = 77
     received_number = atoi(buf);
     result = ((received_number * 69.00) / 77.00);
+    printf("Resultado: %f\n", result);
 
     if (strcmp(buf, "over") == 0)
     {
