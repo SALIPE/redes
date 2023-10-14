@@ -14,6 +14,12 @@
 #define SERVER_PORT 12345 /* should be over 1024 */
 #define BUF_SIZE 1024     /* block transfer size */
 
+struct dados
+{
+  int numero;
+  char nome[BUF_SIZE];
+};
+
 int fatal(char *str1, char *str2)
 {
   fprintf(stderr, str1, str2);
@@ -26,6 +32,7 @@ int main(int argc, char *argv[])
   char buf[BUF_SIZE];         /* buffer for incoming line */
   struct hostent *host;       /* info about server */
   struct sockaddr_in channel; /* holds IP address */
+  struct dados informacao;
   int addlen = sizeof(channel);
 
   if (argc < 3)
@@ -46,7 +53,10 @@ int main(int argc, char *argv[])
 
   if (atoi(argv[1]) > 0)
   {
-    sendto(socket_client, argv[1], (strlen(argv[1]) + 1), 0, (struct sockaddr *)&channel, sizeof(channel));
+    strncpy(informacao.nome, argv[2], sizeof(informacao.nome));
+    informacao.numero = atoi(argv[1]);
+
+    sendto(socket_client, &informacao, sizeof(struct dados), 0, (struct sockaddr *)&channel, sizeof(channel));
 
     recvfrom(socket_client, buf, BUF_SIZE, 0, (struct sockaddr *)&channel, &addlen);
     printf("Resultado: %s\n", buf);

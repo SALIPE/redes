@@ -24,6 +24,12 @@ int fatal(char *str1, char *str2)
   exit(-1);
 }
 
+struct dados
+{
+  int numero;
+  char nome[BUF_SIZE];
+};
+
 int main(int argc, char *argv[])
 {
   int server_socket,
@@ -35,7 +41,7 @@ int main(int argc, char *argv[])
   struct sockaddr_in channel; /* holds IP address */
   struct sockaddr_in channel_client;
   int addlen = sizeof(channel_client);
-  int received_number;
+  struct dados received;
   char result_buf[BUF_SIZE];
 
   memset(&channel, 0, sizeof(channel)); /* make all-zeros */
@@ -56,16 +62,17 @@ int main(int argc, char *argv[])
   flag = 1;
   while (flag)
   {
-    recvfrom(server_socket, buf, BUF_SIZE, 0, (struct sockaddr *)&channel_client, &addlen);
+    printf("Servidor Ligado\n");
+    recvfrom(server_socket, &received, sizeof(struct dados), 0, (struct sockaddr *)&channel_client, &addlen);
 
-    printf("%s received from %s:%d\n%s\n", argv[0], inet_ntoa(channel_client.sin_addr), ntohs(channel_client.sin_port), buf);
+    printf("Mensagem recebida de %s\n", received.nome);
     // Aluno 1: Felipe Bueno = 2letra = 69
     // Aluno 2: Messias Magalhães = 77
-    received_number = atoi(buf);
+    // received_number = atoi(buf);
 
-    gcvt(((received_number * 69.00) / 77.00), 6, result_buf);
+    gcvt(((received.numero * 69.00) / 77.00), 6, result_buf);
     sendto(server_socket, result_buf, (strlen(result_buf) + 1), 0, (struct sockaddr *)&channel_client, sizeof(channel_client));
-    if (strcmp(buf, "over") == 0)
+    if (strcmp(received.nome, "over") == 0)
     {
       close(server_socket);
       flag = 0;
